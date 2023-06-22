@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { LoginBg, Logo } from '../assets'
 import { LoginInput } from '../components'
 import { FaEnvelope, FaLock, FcGoogle } from '../assets/icons';
@@ -8,6 +8,9 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPas
 import { app } from "../config/firebase.config";
 import jwt_decode from 'jwt-decode';
 import {useNavigate} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserDetails } from '../context/actions/userActions';
+import { alertInfo, alertWarning } from '../context/actions/alertActions';
  
 
 const Login = () => {
@@ -15,11 +18,20 @@ const Login = () => {
     const [isSignUp, setIsSignUp] = useState(false);
     const [password, setPassword] = useState("");
     const [confirm_password, setConfirm_password] = useState("");
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const alert = useSelector((state) => state.alert);
 
     //first we need to get the authentication information from our app, which all authentication we have enabled
     const firebaseAuth = getAuth(app);
     const provider = new GoogleAuthProvider();
+    const dispatch = useDispatch();
+    //if the user is already present or logged then we should not show the login page
+    const user = useSelector(state => state.user);
+    useEffect(()=> {
+        if(user) {
+            navigate("/", {replace : true});
+        }
+    }, [user])
 
     const loginWithGoogle = async ()=> {
         try {
@@ -27,7 +39,8 @@ const Login = () => {
             const user = result.user;
             const token = user.accessToken;
             const data = jwt_decode(token);
-            console.log(data);
+
+            dispatch(setUserDetails(data));
             navigate("/", {replace : true});
         } catch (error) {
             console.log(error)
@@ -38,6 +51,7 @@ const Login = () => {
     const signUpWithEmailPass = async()=> {
         if((userEmail === "" || password === "" || confirm_password === "")) {
             //alert message
+            dispatch(alertInfo("Required fields should be empty"))
         }else {
             if(password === confirm_password) {
                 try {
@@ -48,14 +62,16 @@ const Login = () => {
                     setUserEmail("");
                     setConfirm_password("");
                     setPassword("");
-                    console.log(data);
+
+                    dispatch(setUserDetails(data));
                     navigate("/", {replace : true});
                 } catch(error) {
                     console.log(error);
                 }
                 
             }else {
-                //alret message
+                dispatch(alertWarning("Password doesn't match"))
+
             }
         }
 
@@ -66,14 +82,14 @@ const Login = () => {
             try {
                 const user = await signInWithEmailAndPassword(firebaseAuth, userEmail, password);
                 if(user) {
-                    console.log(user);
+                    dispatch(setUserDetails(user));
                     navigate("/", {replace : true});
                 }
             }catch(error) {
                 console.log(error)
             }
         }else {
-            //alert message
+            dispatch(alertWarning("Password doesn't match"))
         }
     }
 
