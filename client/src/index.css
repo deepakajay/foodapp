@@ -13,3 +13,8 @@ body {
     /* setting the font family for the website, by defautt jost is set, if it is not loading we are preferring san-serif if not then system-ui */
     font-family: "Jost", sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+
+.MuiPaper-root {
+    width: 100%;
+    
+}

@@ -49,7 +49,7 @@ const DBLEftSection = () => {
                 </NavLink>
             </ul>
 
-            <div className='w-full items-center justify-center flex h-225 mt-auto px-2'>
+            <div className='w-full items-center justify-center flex h-225 mt-auto px-2 mb-100'>
                 <div className='w-full h-full rounded-md bg-red-400 flex items-center justify-center flex-col gap-3 px-3'>
                     <div className='w-12 h-12 border bg-white rounded-full flex items-center justify-center'>
                         <p className='text-2xl font-bold text-red-500'>?</p>
