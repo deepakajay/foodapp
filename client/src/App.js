@@ -9,6 +9,8 @@ import { setUserDetails } from "./context/actions/userActions";
 import { motion } from "framer-motion";
 import { faseInOut } from "./animations";
 import { Alert, MainLoader } from "./components";
+import { getCartItems } from "./api";
+import { setCartItems } from "./context/actions/cartActions";
 
 const App = () => {
   const firebaseAuth = getAuth(app);
@@ -22,6 +24,11 @@ const App = () => {
       if (cred) {
         cred.getIdToken().then((token) => {
           const data = jwt_decode(token);
+          if (data) {
+            getCartItems(data?.user_id).then((items) => {
+              dispatch(setCartItems(items));
+            });
+          }
           //we can dispatch this data using the acion we created to the reducer thus accessing the state in the store
           dispatch(setUserDetails(data));
         });

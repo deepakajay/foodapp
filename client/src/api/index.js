@@ -1,5 +1,17 @@
 import axios from "axios";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  getFirestore,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { app } from "../config/firebase.config";
 
+const db = getFirestore(app);
 const generateRandomId = () => {
   const timestamp = new Date().getTime();
   const randomId = `product_${timestamp}`;
@@ -70,4 +82,90 @@ export const deleteProductById = async (productId) => {
   }
 };
 
-export const getAllUsers = async () => {};
+export const addToCart = async (userId, product) => {
+  const productId = product.id;
+  try {
+    const cartItemsRef = collection(db, "cartItems", userId, "items");
+    const querySnapshot = await getDocs(cartItemsRef);
+    const existingCartItem = querySnapshot.docs.find(
+      (doc) => doc.id === productId
+    );
+
+    if (existingCartItem) {
+      const quantity = existingCartItem.data().quantity + 1;
+      const docRef = doc(db, "cartItems", userId, "items", productId);
+      await updateDoc(docRef, { quantity });
+      return;
+    } else {
+      const data = {
+        product_name: product.product_name,
+        product_category: product.product_category,
+        product_price: product.product_price,
+        imageUrl: product.imageUrl,
+        quantity: 1,
+      };
+
+      const itemDocRef = doc(db, "cartItems", userId, "items", productId);
+      await setDoc(itemDocRef, data);
+      return;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getCartItems = async (userId) => {
+  try {
+    const cartItemsRef = collection(db, "cartItems", userId, "items");
+    const querySnapshot = await getDocs(cartItemsRef);
+    const response = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id, // Add the document ID as "id"
+        ...data, // Include the rest of the document data
+      };
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateCart = async (userId, productId, type) => {
+  console.log("UserId=", userId, "prodcutId-", productId, "type--", type);
+  try {
+    const cartItemsRef = collection(db, "cartItems", userId, "items");
+    const querySnapshot = await getDocs(cartItemsRef);
+    console.log("query Snapshot");
+    console.log(querySnapshot);
+    const existingCartItem = querySnapshot.docs.find(
+      (doc) => doc.id === productId
+    );
+    console.log("Existing cart Item");
+    console.log(existingCartItem);
+    if (existingCartItem) {
+      const { quantity } = existingCartItem.data();
+      if (type === "increment") {
+        const updatedQuantity = quantity + 1;
+        const docRef = doc(db, "cartItems", userId, "items", productId);
+        await updateDoc(docRef, { quantity: updatedQuantity });
+      } else {
+        if (quantity === 1) {
+          const docRef = doc(db, "cartItems", userId, "items", productId);
+          await deleteDoc(docRef);
+        } else {
+          const updatedQuantity = quantity - 1;
+          const docRef = doc(db, "cartItems", userId, "items", productId);
+          await updateDoc(docRef, { quantity: updatedQuantity });
+        }
+      }
+    }
+
+    // Get updated cart items
+    const updatedSnapshot = await getDocs(cartItemsRef);
+    const updatedCartItems = updatedSnapshot.docs.map((doc) => doc.data());
+    return updatedCartItems;
+  } catch (error) {
+    console.log(error);
+  }
+};

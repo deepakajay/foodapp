@@ -7,7 +7,7 @@ import { BsExclamationTriangle } from 'react-icons/bs'
 const Alert = ({type, message}) => {
   if(type === "success") {
     return (
-      <motion.div {...faseInOut} className='fixed z-10 top-32 right-12 px-4 py-2 rounded-md backdrop-blur-md bg-emerald-300 shadow-md flex items-center gap-4'>
+      <motion.div {...faseInOut} className='fixed top-32 right-12 px-4 py-2 rounded-md backdrop-blur-md bg-emerald-300 shadow-md flex items-center gap-4 z-[100]'>
         <FaCheck className='text-xl text-emerald-700'></FaCheck>
         <p className='text-xl text-emerald-700'>{message}</p>
       </motion.div>
