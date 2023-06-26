@@ -1,5 +1,5 @@
-import React from 'react'
-import {DataTable} from '../components'
+import React, { useEffect, useState } from 'react'
+import {DataTable, MainLoader} from '../components'
 import { HiCurrencyRupee } from '../assets/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteProductById, getAllProducts } from '../api/index'
@@ -9,9 +9,15 @@ import { setAllProducts } from '../context/actions/productActions'
 const DBItems = () => {
   const products = useSelector((state)=>state.products);
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(()=>{
+    setIsLoading(true);
+    setTimeout(()=>{setIsLoading(false)},2000)
+  },[])
 
   return (
     <div className='flex items-center justify-self-center gap-4 pt-6 w-full'>
+      {isLoading ? <MainLoader/> : 
       <DataTable columns={[
         {title:"Image", field:"imageURL", render:(rowData)=>(
           <img src={rowData.imageUrl} className='w-32 h-16 object-contain rounded-md'></img>
@@ -61,7 +67,7 @@ const DBItems = () => {
       ]}
       
       
-      />
+      />}
     </div>
   )
 }

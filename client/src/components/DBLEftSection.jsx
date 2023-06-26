@@ -40,13 +40,6 @@ const DBLEftSection = () => {
                 }>
                             New Items
                 </NavLink>
-
-                <NavLink  to={"/dashboard/users"} className={({isActive})=> 
-                    isActive? `${isActiveStyles} px-4 py-2 border-l-8 border-red-500`
-                    : isNotActiveStyles
-                }>
-                            Users
-                </NavLink>
             </ul>
 
             <div className='w-full items-center justify-center flex h-225 mt-auto px-2 mb-100'>
@@ -59,7 +52,7 @@ const DBLEftSection = () => {
                         Having trouble in city. Please contact us for more questions
                     </p>
                     <p className='px-4 py-2 rounded-full bg-primary text-red-400 cursor-pointer'>
-                        Get in touch
+                        <a href='https://www.linkedin.com/in/deepak-k-86a056199/'>Get in touch</a>
                     </p>
                 </div>
             </div>

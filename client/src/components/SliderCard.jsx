@@ -6,22 +6,29 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addToCart, getCartItems } from '../api'
 import { alertNull, alertSuccess } from '../context/actions/alertActions'
 import { setCartItems } from '../context/actions/cartActions'
+import { useNavigate } from 'react-router-dom'
 
 const SliderCard = ({data, index}) => {
     const user = useSelector((state)=> state.user);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const sendToCart = ()=>{
-        addToCart(user?.user_id, data).then(res=>{
-            dispatch(alertSuccess('Added to cart'));
-            getCartItems(user?.user_id).then((items)=>{
-                dispatch(setCartItems(items));
+        if(user) {
+            addToCart(user?.user_id, data).then(res=>{
+                dispatch(alertSuccess('Added to cart'));
+                getCartItems(user?.user_id).then((items)=>{
+                    dispatch(setCartItems(items));
+                })
+    
+                setTimeout(()=>{
+                    dispatch(alertNull());
+                }, 3000)
             })
-
-            setTimeout(()=>{
-                dispatch(alertNull());
-            }, 3000)
-        })
+        }else {
+            navigate("/login", { replace: true });
+          }
+        
     }
 
   return (

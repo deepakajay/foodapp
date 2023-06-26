@@ -29,6 +29,20 @@ const AboutUs = () => {
           </div>
         </div>
       </div>
+      <div className='w-full items-center justify-center flex h-225 mt-auto px-2 mb-100'>
+                <div className='w-full h-full rounded-md bg-red-400 flex items-center justify-center flex-col gap-3 px-3'>
+                    <div className='w-12 h-12 border bg-white rounded-full flex items-center justify-center'>
+                        <p className='text-2xl font-bold text-red-500'>?</p>
+                    </div>
+                    <p className='text-xl text-primary font-semibold'>Help Center</p>
+                    <p className='text-base text-gray-300 text-center'>
+                        Having trouble in city. Please contact us for more questions
+                    </p>
+                    <p className='px-4 py-2 rounded-full bg-primary text-red-400 cursor-pointer'>
+                        <a href='https://www.linkedin.com/in/deepak-k-86a056199/'>Get in touch</a>
+                    </p>
+                </div>
+            </div>
     </main>
   );
 };

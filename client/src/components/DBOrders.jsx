@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrder } from "../api";
 import { setOrders } from "../context/actions/ordersAction";
-import { OrderData } from "../components";
+import { MainLoader, NoOrders, OrderData } from "../components";
 
 const DBOrders = () => {
   const orders = useSelector((state) => state.orders);
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!orders) {
@@ -14,11 +15,14 @@ const DBOrders = () => {
         dispatch(setOrders(data));
       });
     }
+    setIsLoading(true);
+    setTimeout(()=>{setIsLoading(false)},2000)
   }, []);
 
   return (
     <div className=" flex items-center justify-center flex-col pt-6 w-full gap-4">
-      {orders ? (
+      {isLoading ? <MainLoader/> : (
+      orders ? (
         <>
           {orders.map((item, i) => (
             <OrderData key={i} index={i} data={item} admin={true} />
@@ -26,9 +30,9 @@ const DBOrders = () => {
         </>
       ) : (
         <>
-          <h1 className="text-[72px] text-headingColor font-bold">No Data</h1>
+          <NoOrders/>
         </>
-      )}
+      ))}
     </div>
   );
 };

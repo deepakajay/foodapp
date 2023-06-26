@@ -1,5 +1,5 @@
 import React from 'react'
-import {DBHeader, DBHome, DBItems, DBNewItem, DBOrders, DBUsers} from '../components'
+import {DBHeader, DBHome, DBItems, DBNewItem, DBOrders} from '../components'
 import { Route, Routes } from 'react-router-dom'
 
 const DBRightSection = () => {
@@ -12,7 +12,6 @@ const DBRightSection = () => {
                 <Route path='/orders' element={<DBOrders/>}/>
                 <Route path='/items' element={<DBItems/>}/>
                 <Route path='/newItems' element={<DBNewItem/>}/>
-                <Route path='/users' element={<DBUsers/>}/>
             </Routes>
         </div>
     </div>

@@ -5,6 +5,13 @@ import { buttonClick, staggerFadeInOut } from '../animations'
 import {  randomData } from '../utils/styles'
 
 const Home = () => {
+    const scrollToBottom = () =>{
+        window.scrollTo({
+            top: 1199, // Specify the desired vertical scroll position
+            behavior: 'smooth', // Add smooth scrolling behavior
+          });
+    }
+
   return (
     <motion.div className='w-full grid grid-cols-1 md:grid-cols-2 gap-4'>
         <div className='flex flex-col items-start justify-start gap-6'>
@@ -22,13 +29,13 @@ const Home = () => {
             <p className='text-textColor text-lg'>
 Welcome to our food app! We are your go-to platform for ordering delicious meals right to your doorstep. With a wide range of cuisines and partnering restaurants, we offer a convenient and enjoyable dining experience.
 <br/>Browse through our diverse menu options, carefully curated to cater to all tastes and preferences. From traditional favorites to innovative culinary creations, our app brings you a world of flavors at your fingertips.</p>
-            <motion.button {...buttonClick} className='bg-gradient-to-bl from-orange-400 to-orange-600 px-4 py-2 rounded-xl text-black text-base font-semibold'>Order Now</motion.button>
+            <motion.button {...buttonClick} className='bg-gradient-to-bl from-orange-400 to-orange-600 px-4 py-2 rounded-xl text-black text-base font-semibold' onClick={scrollToBottom}>Order Now</motion.button>
         </div>
 
         <div className='py-2 flex-1 items-center justify-end relative'>
             <img className='absolute top-0 right-0 md:-right-12 w-full h-420 md:w-auto md:h-650' src={HeroBg} alt=''/>
             
-            <div className='w-full md:w-460 flex flex-wrap items-center justify-center gap-4 gap-y-14 ml-20'>
+            <div className='w-full md:w-460 flex flex-wrap items-center justify-center gap-4 gap-y-14'>
                 {randomData && randomData?.map((data, i)=>(
                     <motion.div key={i} {...staggerFadeInOut(i)} className='w-32 h-36 md:h-auto md:w-190 p-4 bg-lightOverlay backdrop-blur-md rounded-3xl flex flex-col items-center justify-center drop-shadow-lg'>
                         <img src={data.imageUrl} className='w-12 h-12 md:w-32 md:h-32 md:-mt-16 object-contain' alt=''/>

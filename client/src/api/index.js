@@ -174,7 +174,7 @@ export const orderItems = async (userId, cart, address) => {
   try {
     let total = 0;
     for (let i = 0; i < cart.length; i++) {
-      total += parseInt(cart[i].product_price);
+      total += parseInt(cart[i].product_price) * cart[i].quantity;
     }
     const cartData = {
       userId,
