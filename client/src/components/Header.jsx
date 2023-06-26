@@ -27,6 +27,26 @@ const Header = () => {
         })
         .catch((err)=> console.log(err));
     }
+    const scrollToMenu=()=>{
+        window.scrollTo({
+            top: 1000, // Specify the desired vertical scroll position
+            behavior: 'smooth', // Add smooth scrolling behavior
+          });
+    }
+    const scrollToTop = ()=>{
+        window.scrollTo({
+            top: 0, // Specify the desired vertical scroll position
+            behavior: 'smooth', // Add smooth scrolling behavior
+          });
+    }
+
+    const scrollToServices=()=>{
+        window.scrollTo({
+            top: 450, // Specify the desired vertical scroll position
+            behavior: 'smooth', // Add smooth scrolling behavior
+          });
+    }
+
   return (
     <header className='fixed backdrop-blur-md z-50 inset-x-0 top-0 flex items-center justify-between px-12 md:px-20 py-6'>
         <NavLink to={"/"} className="flex items-center justify-center gap-4">
@@ -36,9 +56,9 @@ const Header = () => {
 
         <nav className='flex items-center justify-center gap-8'>
             <ul className='hidden md:flex items-center justify-center gap-16'>
-                <NavLink className={({isActive})=> isActive ? isActiveStyles : isNotActiveStyles} to={"/"}>Home</NavLink>
-                <NavLink className={({isActive})=> isActive ? isActiveStyles : isNotActiveStyles} to={"/menu"}>Menu</NavLink>
-                <NavLink className={({isActive})=> isActive ? isActiveStyles : isNotActiveStyles} to={"/services"}>Services</NavLink>
+                <NavLink className={({isActive})=> isActive ? isActiveStyles : isNotActiveStyles} to={"/"} onClick={scrollToTop}>Home</NavLink>
+                <NavLink className={({isActive})=> isActive ? isActiveStyles : isNotActiveStyles} to={"/menu"} onClick={scrollToMenu}>Menu</NavLink>
+                <NavLink className={({isActive})=> isActive ? isActiveStyles : isNotActiveStyles} to={"/services"} onClick={scrollToServices}>Services</NavLink>
                 <NavLink className={({isActive})=> isActive ? isActiveStyles : isNotActiveStyles} to={"/aboutus"}>About Us</NavLink>
             </ul>
             <motion.div {...buttonClick} onClick={()=>dispatch(setCartOn())} className='relative cursor-pointer'>

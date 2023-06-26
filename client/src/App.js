@@ -8,7 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUserDetails } from "./context/actions/userActions";
 import { motion } from "framer-motion";
 import { faseInOut } from "./animations";
-import { Alert, MainLoader, UserOrders, CheckoutSuccess } from "./components";
+import {
+  Alert,
+  MainLoader,
+  UserOrders,
+  CheckoutSuccess,
+  AboutUs,
+} from "./components";
 import { getCartItems } from "./api";
 import { setCartItems } from "./context/actions/cartActions";
 
@@ -83,6 +89,7 @@ const App = () => {
           path="/user-orders/*"
           element={<ProtectedRoute element={<UserOrders />} />}
         />
+        <Route path="/aboutus" element={<AboutUs />} />
       </Routes>
 
       {alert?.type && <Alert type={alert.type} message={alert.message} />}

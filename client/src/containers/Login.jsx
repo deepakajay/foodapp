@@ -10,7 +10,7 @@ import jwt_decode from 'jwt-decode';
 import {useNavigate} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserDetails } from '../context/actions/userActions';
-import { alertInfo, alertNull, alertWarning } from '../context/actions/alertActions';
+import { alertDanger, alertInfo, alertNull, alertWarning } from '../context/actions/alertActions';
  
 
 const Login = () => {
@@ -43,7 +43,9 @@ const Login = () => {
             dispatch(setUserDetails(data));
             navigate("/", {replace : true});
         } catch (error) {
-            console.log(error)
+            dispatch(alertDanger(error))
+                setTimeout(()=>{dispatch(alertNull())},3000)
+                console.log(error)
         }
   
     };
@@ -51,7 +53,7 @@ const Login = () => {
     const signUpWithEmailPass = async()=> {
         if((userEmail === "" || password === "" || confirm_password === "")) {
             //alert message
-            dispatch(alertInfo("Required fields should be empty"))
+            dispatch(alertInfo("Required fields are be empty!!!"))
         }else {
             if(password === confirm_password) {
                 try {
@@ -66,7 +68,9 @@ const Login = () => {
                     dispatch(setUserDetails(data));
                     navigate("/", {replace : true});
                 } catch(error) {
-                    console.log(error);
+                    dispatch(alertDanger(error))
+                setTimeout(()=>{dispatch(alertNull())},3000)
+                console.log(error)
                 }
                 
             }else {
@@ -86,10 +90,12 @@ const Login = () => {
                     navigate("/", {replace : true});
                 }
             }catch(error) {
+                dispatch(alertDanger(error))
+                setTimeout(()=>{dispatch(alertNull())},3000)
                 console.log(error)
             }
         }else {
-            dispatch(alertWarning("Password doesn't match"))
+            dispatch(alertWarning("Username or password doesn't match"))
             setTimeout(()=>{dispatch(alertNull())},3000)
         }
     }

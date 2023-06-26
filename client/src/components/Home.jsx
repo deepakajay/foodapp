@@ -19,7 +19,9 @@ const Home = () => {
             {/* Hero texts */}
             <p className='text-[40px] text-headingColor md:text-[72px] font-sans font-extrabold tracking-wider'>The Fastest Delivery in <span className='text-orange-600'>Your City</span></p>
 
-            <p className='text-textColor text-lg'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum dolorum quidem enim neque velit nam, unde iure ab repellendus et similique voluptas expedita, illo fuga dicta recusandae ratione fugiat numquam.</p>
+            <p className='text-textColor text-lg'>
+Welcome to our food app! We are your go-to platform for ordering delicious meals right to your doorstep. With a wide range of cuisines and partnering restaurants, we offer a convenient and enjoyable dining experience.
+<br/>Browse through our diverse menu options, carefully curated to cater to all tastes and preferences. From traditional favorites to innovative culinary creations, our app brings you a world of flavors at your fingertips.</p>
             <motion.button {...buttonClick} className='bg-gradient-to-bl from-orange-400 to-orange-600 px-4 py-2 rounded-xl text-black text-base font-semibold'>Order Now</motion.button>
         </div>
 

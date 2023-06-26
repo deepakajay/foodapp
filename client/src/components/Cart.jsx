@@ -181,7 +181,7 @@ export const CartItemCard = ({index, data})=> {
     const [itemTotal, setItemTotal] = useState(0);
     
     const decrementCart = (productId)=>{
-        dispatch(alertSuccess("Updated the cart item please wait!"))
+        dispatch(alertSuccess("Updating the cart item please wait!"))
         updateCart(user?.user_id, productId, "decrement").then((data)=> {
             getCartItems(user?.user_id).then((items)=>{
                 dispatch(setCartItems(items));
@@ -191,7 +191,7 @@ export const CartItemCard = ({index, data})=> {
     }
     const incrementCart = (productId)=> {
         console.log("increment data ncoming", productId);
-        dispatch(alertSuccess("Updated the cart item please wait!"))
+        dispatch(alertSuccess("Updating the cart item please wait!"))
         updateCart(user?.user_id, productId, "increment").then((data)=> {
             getCartItems(user?.user_id).then((items)=>{
                 dispatch(setCartItems(items));

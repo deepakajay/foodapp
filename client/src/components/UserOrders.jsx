@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrder } from "../api";
-import { Header, OrderData } from "../components";
+import { Header, NoOrders, OrderData } from "../components";
 import { setOrders } from "../context/actions/ordersAction";
 
 const UsersOrder = () => {
@@ -34,7 +34,7 @@ const UsersOrder = () => {
           </>
         ) : (
           <>
-            <h1 className="text-[72px] text-headingColor font-bold">No Data</h1>
+            <NoOrders/>
           </>
         )}
       </div>

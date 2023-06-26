@@ -22,3 +22,5 @@ export { default as Cart } from "./Cart";
 export { default as OrderData } from "./OrderData";
 export { default as UserOrders } from "./UserOrders";
 export { default as CheckoutSuccess } from "./CheckoutSuccess";
+export { default as AboutUs } from "./AboutUs";
+export { default as NoOrders } from "./NoOrders";
