@@ -30,6 +30,7 @@ const Cart = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [streetName, setStreetName] = useState('');
     const [houseNumber, setHouseNumber] = useState('');
+    const [formError, setFormError] = useState('');
     const navigate = useNavigate();
   
     const handleClickOpen = () => {
@@ -42,6 +43,10 @@ const Cart = () => {
   
     const handleSubscribe = () => {
       // Handle the form submission here
+      if (!name || !phoneNumber || !streetName || !houseNumber) {
+        setFormError('Please fill in all fields');
+        return;
+      }
       console.log({
         name,
         phoneNumber,
@@ -79,6 +84,14 @@ const Cart = () => {
         }
     },[cart]);
 
+    const handlePhoneNumberChange = (e)=> {
+        const enteredPhoneNumber = e.target.value;
+    const isValidPhoneNumber = /^[6-9]\d{9}$/.test(enteredPhoneNumber);
+    const validatedPhoneNumber = e.target.value.replace(/\D/g, '');
+    setPhoneNumber(validatedPhoneNumber);
+    setFormError(isValidPhoneNumber ? '' : "Please enter valid phone no!")
+    }
+
   return (
     <motion.div {...slideIn} className='fixed z-50 top-0 right-0 w-300 md:w-508 bg-lightOverlay backdrop-blur-md shadow-md h-screen'>
         <div className='w-full flex items-center justify-between py-4 pb-12 px-6'>
@@ -115,55 +128,62 @@ const Cart = () => {
 
 
                         {/* Popup */}
-                        <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Address</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            please enter your information below.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Name"
-            type="text"
-            fullWidth
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <TextField
-            margin="dense"
-            id="phone"
-            label="Phone Number"
-            type="tel"
-            fullWidth
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-          />
-          <TextField
-            margin="dense"
-            id="street"
-            label="Street Name"
-            type="text"
-            fullWidth
-            value={streetName}
-            onChange={(e) => setStreetName(e.target.value)}
-          />
-          <TextField
-            margin="dense"
-            id="house"
-            label="House Number"
-            type="text"
-            fullWidth
-            value={houseNumber}
-            onChange={(e) => setHouseNumber(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubscribe}>Order</Button>
-        </DialogActions>
-      </Dialog>
+                        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+      <DialogTitle>Delivery Address</DialogTitle>
+      <DialogContent>
+        <DialogContentText>Please enter your information below.</DialogContentText>
+        <TextField
+          autoFocus
+          margin="dense"
+          id="name"
+          label="Name"
+          type="text"
+          fullWidth
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          variant="outlined"
+          className="mb-4"
+        />
+        <TextField
+          margin="dense"
+          id="phone"
+          label="Phone Number"
+          type="tel"
+          fullWidth
+          value={phoneNumber}
+          onChange={handlePhoneNumberChange}
+          variant="outlined"
+          className="mb-4"
+        />
+        <TextField
+          margin="dense"
+          id="street"
+          label="Street Name"
+          type="text"
+          fullWidth
+          value={streetName}
+          onChange={(e) => setStreetName(e.target.value)}
+          variant="outlined"
+          className="mb-4"
+        />
+        <TextField
+          margin="dense"
+          id="house"
+          label="House Number"
+          type="text"
+          fullWidth
+          value={houseNumber}
+          onChange={(e) => setHouseNumber(e.target.value)}
+          variant="outlined"
+          className="mb-4"
+        />
+        {formError && <p className="text-red-500">{formError}</p>}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="primary">Cancel</Button>
+        <Button onClick={handleSubscribe} color="primary">Order</Button>
+      </DialogActions>
+    </Dialog>
                     
                 </div>
             </>) : (<>
