@@ -11,6 +11,7 @@ import { faseInOut } from "./animations";
 import { Alert, MainLoader } from "./components";
 import { getCartItems } from "./api";
 import { setCartItems } from "./context/actions/cartActions";
+import CheckoutSuccess from "./components/CheckoutSuccess";
 
 const App = () => {
   const firebaseAuth = getAuth(app);
@@ -54,6 +55,7 @@ const App = () => {
         <Route path="/*" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
+        <Route path="/checkout/*" element={<CheckoutSuccess />} />
       </Routes>
 
       {alert?.type && <Alert type={alert.type} message={alert.message} />}

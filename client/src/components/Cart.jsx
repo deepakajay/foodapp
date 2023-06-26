@@ -6,14 +6,66 @@ import { setCartOff } from '../context/actions/displayCartActions'
 import {BiChevronsRight, FcClearFilters } from '../assets/icons'
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { getCartItems, updateCart } from '../api'
-import { setCartItems } from '../context/actions/cartActions'
+import { deleteCart, getCartItems, orderItems, updateCart } from '../api'
+import { clearCartItems, setCartItems } from '../context/actions/cartActions'
 import { alertNull, alertSuccess } from '../context/actions/alertActions'
+import { useNavigate } from 'react-router-dom'
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const Cart = () => {
     const dispatch = useDispatch();
+    const user = useSelector((state)=> state.user);
     const cart = useSelector((state)=> state.cart);
+
     const [total, setTotal] = useState(0);
+    const [open, setOpen] = React.useState(false);
+    const [name, setName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [streetName, setStreetName] = useState('');
+    const [houseNumber, setHouseNumber] = useState('');
+    const navigate = useNavigate();
+  
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
+  
+    const handleSubscribe = () => {
+      // Handle the form submission here
+      console.log({
+        name,
+        phoneNumber,
+        streetName,
+        houseNumber,
+      });
+      const address = {
+        "Name" : name,
+        "PhoneNumber" : phoneNumber,
+        "Street":streetName,
+        "HouseNo" : houseNumber,
+      }
+      if(user) {
+            if(cart) {
+                orderItems(user?.user_id, cart, address).then(()=> {
+                    dispatch(alertSuccess("Order placed successfully"));
+                    navigate("/checkout", {replace:true})
+                    dispatch(clearCartItems());
+                    dispatch(alertNull());
+                })
+            }
+        } 
+      // Add your logic to submit the form data or perform any other actions
+      handleClose();
+    };
 
     useEffect(()=>{
         let tot = 0;
@@ -47,15 +99,71 @@ const Cart = () => {
                         <CartItemCard key={i} data={item}/>
                     ))}
                 </div>
-                <div className='bg-zinc-800 rounded-t-[60px] w-full h-[35%] flex flex-col items-center justify-center px-4 pb-[5.7rem] gap-24'>
+                <div className='bg-zinc-800 rounded-t-[60px] w-full h-[35%] flex flex-col items-center justify-center px-4 pb-[8.7rem] gap-24'>
                     <div className='w-full flex items-center justify-evenly'>
                         <p className='text-3xl text-zinc-500 font-semibold'>Total</p>
                         <p className='text-3xl text-orange-500 font-semibold flex items-center justify-center gap-1'>
                         
                                 ₹{total}
-                            
+                                <motion.button {...buttonClick} className='bg-orange-400 w-[70%] px-4 text-xl text-headingColor font-semibold hover:bg-orange-500 drop-shadow-md rounded-2xl' onClick={handleClickOpen}>
+                                 Check out
+                             </motion.button>
                         </p>
                     </div>
+                        
+
+
+                        {/* Popup */}
+                        <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Address</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            please enter your information below.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Name"
+            type="text"
+            fullWidth
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <TextField
+            margin="dense"
+            id="phone"
+            label="Phone Number"
+            type="tel"
+            fullWidth
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+          />
+          <TextField
+            margin="dense"
+            id="street"
+            label="Street Name"
+            type="text"
+            fullWidth
+            value={streetName}
+            onChange={(e) => setStreetName(e.target.value)}
+          />
+          <TextField
+            margin="dense"
+            id="house"
+            label="House Number"
+            type="text"
+            fullWidth
+            value={houseNumber}
+            onChange={(e) => setHouseNumber(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSubscribe}>Order</Button>
+        </DialogActions>
+      </Dialog>
+                    
                 </div>
             </>) : (<>
                 <h1 className='text-3xl text-primary font-bold'>Empty Cart</h1>
@@ -72,7 +180,7 @@ export const CartItemCard = ({index, data})=> {
     const [itemTotal, setItemTotal] = useState(0);
     
     const decrementCart = (productId)=>{
-        dispatch(alertSuccess("Updated the cart item"))
+        dispatch(alertSuccess("Updated the cart item please wait!"))
         updateCart(user?.user_id, productId, "decrement").then((data)=> {
             getCartItems(user?.user_id).then((items)=>{
                 dispatch(setCartItems(items));
@@ -82,7 +190,7 @@ export const CartItemCard = ({index, data})=> {
     }
     const incrementCart = (productId)=> {
         console.log("increment data ncoming", productId);
-        dispatch(alertSuccess("Updated the cart item"))
+        dispatch(alertSuccess("Updated the cart item please wait!"))
         updateCart(user?.user_id, productId, "increment").then((data)=> {
             getCartItems(user?.user_id).then((items)=>{
                 dispatch(setCartItems(items));

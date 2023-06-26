@@ -169,3 +169,28 @@ export const updateCart = async (userId, productId, type) => {
     console.log(error);
   }
 };
+
+export const orderItems = async (userId, cart, address) => {
+  try {
+    const cartRef = doc(db, "orders", userId);
+    const cartData = { items: cart, address, status: "pending" }; // Append address to cartData object
+    await setDoc(cartRef, cartData);
+    console.log("Order added successfully!");
+    deleteCart(userId).then(()=>{
+      console.log("Cart deleted");
+    })
+  } catch (error) {
+    console.error("Error adding cart to Firestore:", error);
+  }
+};
+
+export const deleteCart = async (userId) => {
+  try {
+    const cartItemsRef = collection(db, "cartItems", userId, "items");
+    await deleteDoc(cartItemsRef);
+
+    console.log("Cart deleted from Firestore successfully!");
+  } catch (error) {
+    console.error("Error deleting cart from Firestore:", error);
+  }
+};
