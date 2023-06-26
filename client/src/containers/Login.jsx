@@ -10,7 +10,7 @@ import jwt_decode from 'jwt-decode';
 import {useNavigate} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserDetails } from '../context/actions/userActions';
-import { alertInfo, alertWarning } from '../context/actions/alertActions';
+import { alertInfo, alertNull, alertWarning } from '../context/actions/alertActions';
  
 
 const Login = () => {
@@ -71,7 +71,7 @@ const Login = () => {
                 
             }else {
                 dispatch(alertWarning("Password doesn't match"))
-
+                setTimeout(()=>{dispatch(alertNull())},3000)
             }
         }
 
@@ -90,6 +90,7 @@ const Login = () => {
             }
         }else {
             dispatch(alertWarning("Password doesn't match"))
+            setTimeout(()=>{dispatch(alertNull())},3000)
         }
     }
 

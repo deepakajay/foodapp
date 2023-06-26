@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { Dashboard, Login, Main } from "./containers";
 import { getAuth } from "firebase/auth";
 import { app } from "./config/firebase.config";
@@ -8,16 +8,33 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUserDetails } from "./context/actions/userActions";
 import { motion } from "framer-motion";
 import { faseInOut } from "./animations";
-import { Alert, MainLoader } from "./components";
+import { Alert, MainLoader, UserOrders, CheckoutSuccess } from "./components";
 import { getCartItems } from "./api";
 import { setCartItems } from "./context/actions/cartActions";
-import CheckoutSuccess from "./components/CheckoutSuccess";
 
 const App = () => {
   const firebaseAuth = getAuth(app);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const alert = useSelector((state) => state.alert);
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user);
+
+  const ProtectedRoute = ({ path, element }) => {
+    if (user) {
+      return element;
+    } else {
+      navigate("/login", { replace: true });
+    }
+  };
+
+  const AdminRoute = ({ path, element }) => {
+    if (user?.user_id === process.env.REACT_APP_ADMIN_USER) {
+      return element;
+    } else {
+      navigate("/login", { replace: true });
+    }
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -54,8 +71,18 @@ const App = () => {
       <Routes>
         <Route path="/*" element={<Main />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard/*" element={<Dashboard />} />
-        <Route path="/checkout/*" element={<CheckoutSuccess />} />
+        <Route
+          path="/dashboard/*"
+          element={<AdminRoute element={<Dashboard />} />}
+        />
+        <Route
+          path="/checkout/*"
+          element={<ProtectedRoute element={<CheckoutSuccess />} />}
+        />
+        <Route
+          path="/user-orders/*"
+          element={<ProtectedRoute element={<UserOrders />} />}
+        />
       </Routes>
 
       {alert?.type && <Alert type={alert.type} message={alert.message} />}

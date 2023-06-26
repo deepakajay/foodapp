@@ -53,9 +53,9 @@ const Header = () => {
                     </div>
 
                     {isMenu ? (<motion.div className='px-6 py-4 w-48 bg-lightOverlay backdrop-blur-md rounded-md shadow-md absolute top-12 right-0 flex flex-col gap-4' {...slideTop}>
-                        <Link className='hover:text-red-500 text-xl text-textColor' to={"/dashboard/home"}>
+                        {user?.user_id === process.env.REACT_APP_ADMIN_USER && <Link className='hover:text-red-500 text-xl text-textColor' to={"/dashboard/home"}>
                             Dashboard
-                        </Link>
+                        </Link>}
 
                         <Link className='hover:text-red-500 text-xl text-textColor' to={"/profile"}>
                             My Profile

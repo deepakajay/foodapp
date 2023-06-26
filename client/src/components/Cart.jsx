@@ -17,6 +17,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import EmptyCart from './EmptyCart'
 
 const Cart = () => {
     const dispatch = useDispatch();
@@ -91,7 +92,7 @@ const Cart = () => {
         </div>
 
 
-        <div className='flex-1 flex flex-col items-start justify-start rounded-t-3xl bg-zinc-900 h-full py-6 gap-3 relative'>
+        <div className='flex-1 flex flex-col items-start justify-start rounded-t-3xl  h-full py-6 gap-3 relative'>
             {cart && cart?.length > 0 ? (<>
                 <div className='flex flex-col w-full items-start justify-start gap-3 h-[65%] overflow-y-scroll scrollbar-none px-4'>
                     {cart && cart?.length > 0 && 
@@ -166,7 +167,7 @@ const Cart = () => {
                     
                 </div>
             </>) : (<>
-                <h1 className='text-3xl text-primary font-bold'>Empty Cart</h1>
+                <EmptyCart/>
             </>)}
         </div>
     </motion.div>
@@ -206,7 +207,7 @@ export const CartItemCard = ({index, data})=> {
     },[itemTotal,cart]);
 
     return (
-        <motion.div key={index} {...staggerFadeInOut(index)} className='w-full flex items-center justify-start bg-zinc-800 rounded-md drop-shadow-md px-4 gap-4'>
+        <motion.div key={index} {...staggerFadeInOut(index)} className='w-full flex items-center justify-start rounded-md drop-shadow-md px-4 gap-4'>
             <img src={data?.imageUrl} className='w-24 min-w-[94px] h-24 object-contain' alt=''/>
             <div className='flex items-center justify-start gap-1 w-full'>
                 <p className='text-lg text-primary font-semibold'>

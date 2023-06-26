@@ -172,25 +172,62 @@ export const updateCart = async (userId, productId, type) => {
 
 export const orderItems = async (userId, cart, address) => {
   try {
-    const cartRef = doc(db, "orders", userId);
-    const cartData = { items: cart, address, status: "pending" }; // Append address to cartData object
-    await setDoc(cartRef, cartData);
-    console.log("Order added successfully!");
-    deleteCart(userId).then(()=>{
-      console.log("Cart deleted");
-    })
+    let total = 0;
+    for (let i = 0; i < cart.length; i++) {
+      total += parseInt(cart[i].product_price);
+    }
+    const cartData = {
+      userId,
+      items: cart,
+      address,
+      status: "pending",
+      total,
+    }; // Append address to cartData object
+    const ordersRef = collection(db, "orders");
+    const docRef = await addDoc(ordersRef, cartData);
+    console.log("Order added successfully with ID:", docRef.id);
+    deleteCart(userId, cart).then(() => {
+      console.log("Items deleted from cart of customer");
+    });
   } catch (error) {
     console.error("Error adding cart to Firestore:", error);
   }
 };
 
-export const deleteCart = async (userId) => {
+const deleteCart = async (userId, items) => {
   try {
-    const cartItemsRef = collection(db, "cartItems", userId, "items");
-    await deleteDoc(cartItemsRef);
+    const deletePromises = items.map((data) => {
+      const docRef = doc(db, "cartItems", userId, "items", data.id);
+      return deleteDoc(docRef);
+    });
 
-    console.log("Cart deleted from Firestore successfully!");
+    await Promise.all(deletePromises);
+    console.log("Cart deleted successfully!");
   } catch (error) {
-    console.error("Error deleting cart from Firestore:", error);
+    console.error("Error deleting cart:", error);
+  }
+};
+export const getAllOrder = async () => {
+  try {
+    const ordersRef = collection(db, "orders");
+    const querySnapshot = await getDocs(ordersRef);
+    const orders = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return orders;
+  } catch (error) {
+    console.log("Error fetching orders:", error);
+    return [];
+  }
+};
+
+export const updateOrderStatus = async (orderId, newStatus) => {
+  try {
+    const orderRef = doc(db, "orders", orderId);
+    await updateDoc(orderRef, { status: newStatus });
+    console.log("Order status updated successfully!");
+  } catch (error) {
+    console.error("Error updating order status:", error);
   }
 };
